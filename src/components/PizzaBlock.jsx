@@ -1,5 +1,5 @@
 import React from "react";
-import {logDOM} from "@testing-library/react";
+
 
 export function PizzaBlock({title, price, imageUrl, sizes, types}) {
     // const [pizzaCount, setPizzaCount] = React.useState(0);
@@ -23,13 +23,17 @@ export function PizzaBlock({title, price, imageUrl, sizes, types}) {
             <h4 className="pizza-block__title">{title}</h4>
             <div className="pizza-block__selector">
                 <ul>
-                    {types.map(type =>
-                        <li onClick={() => setActiveType(type)} className={activeType === type ? 'active' : ''}>{typesNames[type]} </li>
+                    {types.map((type, i) =>
+                        <li key={i}  onClick={() => setActiveType(i)}
+                             className={activeType === i ? 'active' : ''}>{typesNames[type]}
+                        </li>
                     )}
                 </ul>
                 <ul>
-                    {sizes.map((size,id )=>
-                        <li onClick={() => setActiveSize(id)} className={activeSize === id ? 'active' : ''}>{size} см.</li>
+                    {sizes.map((size, i ) =>
+                        <li key={i} onClick={() => setActiveSize(i)}
+                            className={activeSize === i ? 'active' : ''}>{size} см.
+                        </li>
                     )}
                 </ul>
             </div>
