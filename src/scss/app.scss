@@ -11,28 +11,48 @@ body {
   width: calc(100vw - 100px);
   height: 100%;
   background-color: #fff;
-  margin: 50px auto;
+  margin: 0 auto;
   border-radius: 10px;
   max-width: 1400px;
+
+  @media (max-width: 578px) {
+    width: 100%;
+  }
 }
 
 .content {
   padding: 40px 0;
 
   &__title {
-    margin: 35px 0;
+    margin: 50px 0;
+    font-size: 40px;
+
+    @media (max-width: 768px) {
+      margin: 35px 0;
+      font-size: 30px;
+    }
   }
 
   &__items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: 0 20px;
+    justify-items: center;
   }
 
   &__top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
+
+    @media (max-width: 1290px) {
+      flex-direction: column-reverse;
+
+      .sort {
+        margin-bottom: 25px;
+      }
+    }
   }
 }
 
