@@ -5,7 +5,7 @@ import {Sort} from "../components/Sort";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import {PizzaBlock} from "../components/PizzaBlock";
 
-const Home = () => {
+const Home = ({searchValue}) => {
     const [items, setItems] = React.useState([]);
     const [isLoading, setIsLoading] = React.useState(true)
     const [categoryId, setCategoryId] = React.useState(0);
@@ -22,11 +22,12 @@ const Home = () => {
         setIsLoading(true);
 
         const category = categoryId > 0 ? `category=${categoryId}` : '';
+        const search = searchValue ? `&search=${searchValue}` : '';
         const sortBy = sortType.sortProperty.replace('-', '');
         const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
 
         fetch(`https://6538192ea543859d1bb13d9d.mockapi.io/items?${
-                category}&sortBy=${sortBy}&order=${order}`
+                category}&sortBy=${sortBy}&order=${order}${search}`
             // }&sortBy=${sortType.sortProperty}&order=${sortType.order}`
             // }&sortBy=${sortType.sortProperty}&order=${orderType ? 'desc' : 'asc'}`
         )
@@ -38,20 +39,25 @@ const Home = () => {
                 setIsLoading(false);
             });
         window.scrollTo(0, 0);
-    }, [categoryId, sortType]);
+    }, [categoryId, sortType, searchValue]);
+
+    // const pizzas = items.filter((obj) => obj.title.toLowerCase().includes(searchValue.toLowerCase())
+    // }).map(...)
+    const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+    const skeletons = [...new Array(6)].map((_, i) => <Skeleton key={i}/>);
 
     return (
         <div className="container">
             <div className="content__top">
                 <Categories categoryId={categoryId} changeCategory={(id) => onSetCategory(id)}/>
-                <Sort sortType={sortType} changeSort={(i) => setSortType(i)} orderType={orderType} setOrderType={setOrderType}/>
+                <Sort sortType={sortType} changeSort={(obj) => setSortType(obj)} orderType={orderType} setOrderType={setOrderType}/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
                 {
                     isLoading
-                        ? [...new Array(6)].map((_, i) => <Skeleton key={i}/>)
-                        : items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)
+                        ? skeletons
+                        : pizzas
                 }
             </div>
         </div>

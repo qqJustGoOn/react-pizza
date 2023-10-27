@@ -9,9 +9,6 @@ export function Categories({categoryId, changeCategory}) {
         'Острые',
         'Закрытые'
     ]
-    // const onClickCategory = (index) => {
-    //     setActiveCategory(index);
-    // };
 
     return (
         <div className="categories">

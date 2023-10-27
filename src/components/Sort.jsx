@@ -11,9 +11,8 @@ export function Sort({sortType, changeSort, orderType, setOrderType}) {
         {name: 'алфавиту (ASC)', sortProperty: '-title',  order: 'asc'}
     ];
 
-
-    const selectItem = (i) => {
-        changeSort(i);
+    const selectItem = (obj) => {
+        changeSort(obj);
         setIsVisible(false);
     }
     return (
