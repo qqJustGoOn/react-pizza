@@ -1,47 +1,49 @@
 import React from 'react';
+import axios from "axios";
 
 import {Categories} from "../components/Categories";
 import {Sort} from "../components/Sort";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import {PizzaBlock} from "../components/PizzaBlock";
 import Pagination from "../components/Pagination";
+import {useDispatch, useSelector} from "react-redux";
 import {SearchContext} from "../App";
+import {setCategoryId, setCurrentPage} from "../redux/slices/filterSlice";
 
 const Home = () => {
+    const dispatch = useDispatch();
+    const {categoryId, sort, currentPage} = useSelector((state) => state.filter);
+    const sortType = sort.sortProperty;
+
     const {searchValue} = React.useContext(SearchContext);
     const [items, setItems] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true)
-    const [categoryId, setCategoryId] = React.useState(0);
-    const [currentPage, setCurrentPage] = React.useState(1);
+    const [isLoading, setIsLoading] = React.useState(true);
     const [orderType, setOrderType] = React.useState(true);
-    const [sortType, setSortType] = React.useState({
-        name: 'популярности',
-        sortProperty: 'rating'
-    });
+
+
     const onSetCategory = (id) => {
-        setCategoryId(id);
+        dispatch(setCategoryId(id));
     };
+
+    const onChangePage = (number) => {
+        dispatch(setCurrentPage(number));
+    }
 
     React.useEffect(() => {
         setIsLoading(true);
 
         const category = categoryId > 0 ? `category=${categoryId}` : '';
         const search = searchValue ? `&search=${searchValue}` : '';
-        const sortBy = sortType.sortProperty.replace('-', '');
-        const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+        const sortBy = sortType.replace('-', '');
+        const order = sortType.includes('-') ? 'asc' : 'desc';
 
-        fetch(`https://6538192ea543859d1bb13d9d.mockapi.io/items?page=${currentPage}&limit=4&${
-                category}&sortBy=${sortBy}&order=${order}${search}`
-            // }&sortBy=${sortType.sortProperty}&order=${sortType.order}`
-            // }&sortBy=${sortType.sortProperty}&order=${orderType ? 'desc' : 'asc'}`
-        )
+        axios.get(`https://6538192ea543859d1bb13d9d.mockapi.io/items?page=${currentPage}&limit=4&${
+            category}&sortBy=${sortBy}&order=${order}${search}`)
             .then((res) => {
-                return res.json();
-            })
-            .then((arr) => {
-                setItems(arr);
+                setItems(res.data);
                 setIsLoading(false);
-            });
+        });
+
         window.scrollTo(0, 0);
     }, [categoryId, sortType, searchValue, currentPage]);
 
@@ -54,7 +56,7 @@ const Home = () => {
         <div className="container">
             <div className="content__top">
                 <Categories categoryId={categoryId} changeCategory={(id) => onSetCategory(id)}/>
-                <Sort sortType={sortType} changeSort={(obj) => setSortType(obj)} orderType={orderType} setOrderType={setOrderType}/>
+                <Sort  orderType={orderType} setOrderType={setOrderType}/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
@@ -64,7 +66,7 @@ const Home = () => {
                         : pizzas
                 }
             </div>
-            <Pagination onChangePage={(number) => setCurrentPage(number)}/>
+            <Pagination currentPage={currentPage} onChangePage={onChangePage}/>
         </div>
     );
 };
