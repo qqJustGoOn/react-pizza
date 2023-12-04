@@ -101,7 +101,7 @@ const Home = () => {
     // const pizzas = items.filter((obj) => obj.title.toLowerCase().includes(searchValue.toLowerCase())
     // }).map(...)
     const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
-    const skeletons = [...new Array(6)].map((_, i) => <Skeleton key={i}/>);
+    const skeletons = [...new Array(4)].map((_, i) => <Skeleton key={i}/>);
 
     return (
         <div className="container">

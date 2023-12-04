@@ -14,14 +14,27 @@ export const list = [
 export function Sort({orderType, setOrderType}) {
     const dispatch = useDispatch();
     const sortType = useSelector((state) => state.filter.sort)
+    const sortRef = React.useRef();
 
     const [isVisible, setIsVisible] = React.useState(false);
     const onSelectItem = (obj) => {
         dispatch(setSortId(obj))
         setIsVisible(false);
     }
+
+    React.useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.composedPath().includes(sortRef.current)) {
+                setIsVisible(false);
+            }
+        }
+
+        document.body.addEventListener('click', handleClickOutside);
+        //При размонтировании компонента(Unmount), удаляем обработчик события
+        return () => document.body.removeEventListener('click', handleClickOutside);
+    }, []);
     return (
-        <div className="sort">
+        <div ref={sortRef} className="sort">
             <div className="sort__label">
                 <svg
                     onClick={() => setOrderType(!orderType)} transform={orderType ? 'rotate(-180 0 0)' : ''}
