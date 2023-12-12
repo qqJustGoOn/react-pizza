@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from "axios";
 import qs from 'qs';
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
@@ -9,7 +8,7 @@ import {list, Sort} from "../components/Sort";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import {PizzaBlock} from "../components/PizzaBlock";
 import Pagination from "../components/Pagination";
-import {SearchContext} from "../App";
+// import {SearchContext} from "../App";
 import {setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizzas} from "../redux/slices/pizzaSlice";
 import styles from "../components/NotFoundBlock/NotFoundBlock.module.scss";
@@ -20,12 +19,12 @@ const Home = () => {
     const isSearch = React.useRef(false);
     const isMounted = React.useRef(false);
 
-    const {categoryId, sort, currentPage} = useSelector((state) => state.filter);
+    const {categoryId, sort, currentPage, searchValue} = useSelector((state) => state.filter);
     const {items, status} = useSelector((state) => state.pizza);
     // const { categoryId, currentPage, sort: { sortProperty: sortType } } = useSelector(state => state.filter)
     const sortType = sort.sortProperty;
 
-    const {searchValue} = React.useContext(SearchContext);
+    // const {searchValue} = React.useContext(SearchContext);
     const [orderType, setOrderType] = React.useState(true);
 
 
@@ -37,8 +36,6 @@ const Home = () => {
     }
 
     const getPizzas = async () => {
-
-
         const category = categoryId > 0 ? `category=${categoryId}` : '';
         const search = searchValue ? `&search=${searchValue}` : '';
         const sortBy = sortType.replace('-', '');
