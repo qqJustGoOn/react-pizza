@@ -1,8 +1,10 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {addItem, selectCartItemByParams} from "../../redux/slices/cartSlice";
+import {Link} from "react-router-dom";
 
 const typesNames = ['тонкое', 'традиционное'];
+
 export function PizzaBlock({id, title, price, imageUrl, sizes, types}) {
     const [activeSize, setActiveSize] = React.useState(0);
     const [activeType, setActiveType] = React.useState(0);
@@ -12,7 +14,7 @@ export function PizzaBlock({id, title, price, imageUrl, sizes, types}) {
 
     const addedPizzaCount = cartItem ? cartItem.count : 0;
     const onClickAdd = () => {
-      //Сгенерировал объект корзины, который будет хранится в редаксе
+        //Сгенерировал объект корзины, который будет хранится в редаксе
         const item = {
             id,
             title,
@@ -26,12 +28,14 @@ export function PizzaBlock({id, title, price, imageUrl, sizes, types}) {
 
     return (
         <div className="pizza-block">
-            <img
+            <Link to={`/pizza/${id}`}>
+                <img
                 className="pizza-block__image"
                 src={imageUrl}
                 alt="Pizza"
-            />
-            <h4 className="pizza-block__title">{title}</h4>
+                />
+                <h4 className="pizza-block__title">{title}</h4>
+            </Link>
             <div className="pizza-block__selector">
                 <ul>
                     {types.map((type, i) =>
